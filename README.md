@@ -99,11 +99,8 @@ https://github.com/user-attachments/assets/915736a8-9bbe-4e83-aeb2-1a3086ffe436
 ## Contributing
 - Open issues and pull requests are welcome. Please include hardware setup, logs, and steps to reproduce.
 - For new sensors or frames, maintain consistent units and document your changes.
-
 ## License
-- This project is licensed under **GPL-3.0-or-later** to remain compatible with the included Bolder Flight Systems `MPU9250` driver.
-- See the GNU GPL v3 text: https://www.gnu.org/licenses/gpl-3.0.txt
-- If you need a different license, you must replace GPL components and re-license accordingly.
+-MIT License. See LICENSE.
 
 ## Acknowledgements
 - MPU9250 driver by Bolder Flight Systems (GPL-3.0).
