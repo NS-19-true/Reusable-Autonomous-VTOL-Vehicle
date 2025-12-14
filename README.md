@@ -5,32 +5,28 @@ This repository contains the embedded firmware and supporting Python tools for G
 https://github.com/user-attachments/assets/915736a8-9bbe-4e83-aeb2-1a3086ffe436
 
 ## Overview
-- Purpose: Real-time estimation of attitude (quaternion), velocity, and position in NED frame, suitable for autonomous VTOL/rocket trajectory tracking.
-- Sensors: MPU9250 IMU (accel/gyro/mag), u-blox GPS (NAV-PVT UBX), BMP280 barometer.
-- Filters:
-  - AHRS_EKF: Quaternion-based EKF combining gyro (process) with accel+mag (measurement).
-  - POS_EKF: 9-state EKF estimating acceleration, velocity, and position in NED frame, driven by IMU and corrected by GPS/BMP.
-- Telemetry: Optional NRF24L01 (RF24) link to transmit 8 floats per packet.
-- Visualization: Python scripts for attitude (Panda3D) and trajectory (Matplotlib).
+- Purpose: Keeps track of which way the drone is pointing, how fast it’s moving, and where it is—live—so it can follow a pre-planned flight path.  
+- Sensors: A motion chip (MPU9250) feels bumps and spins, a GPS (u-blox) tells latitude/longitude, and a tiny barometer (BMP280) reads height.  
+- Smart filters:  
+  – AHRS_EKF: blends gyro, accelerometer, and compass to give a steady “which-way-is-up” quaternion.  
+  – POS_EKF: mixes IMU data with GPS and barometer to deliver clean acceleration, speed, and position.  
+- Radio (optional): NRF24L01 sends a quick 8-number snapshot to the ground.  
+- Laptop view: Python plots a 3-D cube showing attitude and a map showing the flown path.
 
-## Repository Structure
+## What’s Inside
 
-- `README.md` — This document.
-- `Documents/Arduino/libraries/major_project/`
-  - `MPU9250.h/.cpp` — Bolder Flight Systems MPU9250 driver (GPL-3.0). Provides IMU readings.
-  - `ahrs_ekf.h/.cpp` — Quaternion attitude EKF. Predicts with gyro; corrects with accel+mag.
-  - `pos_ekf.h/.cpp` — Position EKF in NED frame. Inputs: quaternion+accel; Measurements: GPS vel + LLA + BMP altitude.
-  - `mpu_pose_ekf.h/.cpp` — Glue module orchestrating sensor setup, bias compensation, AHRS and POS updates.
-  - `gps.h/.cpp` — u-blox UBX NAV-PVT parser over `Serial1`. Exposes iTOW, NED velocities, LLA, MSL altitude.
-  - `bmp.h/.cpp` — Adafruit BMP280 wrapper. Exposes altitude in meters via `bmp_altitude`.
-  - `nrf.h/.cpp` — NRF24L01 telemetry (RF24). Sends/receives 8-float `Data_Package`.
-  - `python_ahrs/`
-    - `ekf_ahrs.py` — Panda3D visualization of attitude (reads quaternion from serial).
-    - `position.py` — Matplotlib animated 3D plot of trajectory (reads N, E, D from serial).
-    - `config/config.prc` — Panda3D configuration file.
-    - `run_ekf_ahrs.bat`, `run_position.bat` — Convenience launchers (adjust COM port as needed).
-  - `teensy_examples/ahrs_quat/ahrs_quat.ino` — Example sketch printing quaternion; note include header comment.
-  - `readme.txt` — Legacy notes.
+- **README.md** – the file you’re reading now.  
+- **Documents/Arduino/libraries/major_project/** – the main code folder.  
+  - **MPU9250** – talks to the motion sensor (accelerometer, gyro, compass).  
+  - **ahrs_ekf** – figures out which way the vehicle is pointing.  
+  - **pos_ekf** – works out speed and position.  
+  - **mpu_pose_ekf** – brings the two filters above together and keeps them running smoothly.  
+  - **gps** – reads location and speed from the GPS module.  
+  - **bmp** – reads height from the barometer.  
+  - **nrf** – optional radio link that can send data to the ground.  
+  - **python_ahrs/** – handy Python programs that draw a 3-D picture of the flight on your computer.  
+  - **teensy_examples/** – a small ready-to-run example you can upload to the board.  
+  - **readme.txt** – old notes (can be ignored).
 
 ## Data Flow
 1. IMU sampling (`MPU9250`): accel/gyro/mag at configured rates (e.g. Ts = 0.004 s).
@@ -91,14 +87,13 @@ https://github.com/user-attachments/assets/915736a8-9bbe-4e83-aeb2-1a3086ffe436
 - Units: accel m/s², velocity m/s, position meters, angles radians (LLA converted to radians in POS_EKF).
 
 ## Known Issues and Caveats
-- Example sketch `ahrs_quat.ino` includes `mpu_ahrs_ekf.h` which is not present; replace with `mpu_pose_ekf.h` or your wrapper.
-- In `gps_setup()`, the line `while(!processGPS);` should be `while(!processGPS());` to actually call the function.
 - Magnetometer calibration constants are hard-coded; consider re-calibrating for your hardware.
 - Ensure `Serial1` pins, I2C/SPI wiring, and RF24 CE/CSN pins match your board.
 
 ## Contributing
 - Open issues and pull requests are welcome. Please include hardware setup, logs, and steps to reproduce.
 - For new sensors or frames, maintain consistent units and document your changes.
+
 ## License
 -MIT License. See LICENSE.
 
