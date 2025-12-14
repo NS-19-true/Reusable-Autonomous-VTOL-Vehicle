@@ -1,3 +1,9 @@
+"""
+Python visualization of 3D trajectory using Matplotlib (animated).
+Expects serial lines with 8 comma-separated values:
+  columns[5..7] = N, E, D position in meters (NED frame)
+Set the COM port and baud as needed; defaults to `COM10` at 2000000.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D

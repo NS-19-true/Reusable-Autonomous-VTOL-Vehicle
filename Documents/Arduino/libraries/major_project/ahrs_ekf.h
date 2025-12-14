@@ -1,3 +1,11 @@
+/*
+  AHRS_EKF: Quaternion-based IMU attitude EKF
+  Fuses gyroscope (process model) with accelerometer and magnetometer (measurement model)
+  to estimate the unit quaternion `q` representing the vehicle attitude.
+  - `init(...)` sets covariances (Q, R), gravity `g`, magnetic field `r`, timestep `Ts`,
+    initial covariance `P`, and initial quaternion `q`.
+  - `update(a, m, w)` runs predict/correct and returns the normalized quaternion.
+*/
 #ifndef AHRS_EKF_H
 #define AHRS_EKF_H
 #if defined(ARDUINO)

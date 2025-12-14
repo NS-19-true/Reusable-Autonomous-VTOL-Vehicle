@@ -1,3 +1,8 @@
+/*
+  NRF24L01 telemetry implementation
+  Uses `RF24 radio(CE=9, CSN=10)` to transmit/receive `Data_Package` across two fixed pipes.
+  AutoAck disabled; 2Mbps data rate; PA set to MAX. Listening mode is resumed after send.
+*/
 #include "nrf.h"
 
 RF24 radio(9, 10); // CE, CSN

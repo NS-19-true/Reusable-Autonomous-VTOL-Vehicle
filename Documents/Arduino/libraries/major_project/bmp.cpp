@@ -1,3 +1,10 @@
+/*
+  BMP280 altitude module implementation
+  Initializes BMP280 and sets sampling configuration; `bmp_read()` updates `bmp_altitude`.
+  Notes:
+  - Sea-level pressure (SLP) is set to 1019.66 hPa; adjust for local SLP for accurate altitude.
+  - Oversampling: Temp x2, Pressure x16; Filter OFF; Standby 1 ms.
+*/
 #include "bmp.h"
 
 Adafruit_BMP280 bmp;

@@ -1,3 +1,10 @@
+/*
+  NRF24L01 telemetry
+  Defines a fixed 8-float message (`Data_Package`) and helpers to send/receive over RF24.
+  - `nrf_setup()` initializes RF24, pipes, data rate, PA level, and starts listening.
+  - `sendData(...)` fills `msg` and transmits; `receiveData()` reads the latest `msg` if available.
+  Pipes: writing=`"efghi"`, reading=`"abcde"` (5-byte pipe addresses).
+*/
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>

@@ -1,3 +1,12 @@
+/*
+  POS_EKF implementation
+  - Provides LLA→ECEF and LLA→NED helpers.
+  - `init(...)` builds Q/R/P/F/H and seeds `x` and reference LLA.
+  - `update(u, Q_q, iTOW, z)` replaces quaternion covariance in Q with input `Q_q`,
+    predicts continuous-time dynamics, and when GPS iTOW increments:
+      * converts [lat, lon, alt] to NED relative to `pos_ref_lla`
+      * runs correction to update x and P
+*/
 #include "pos_ekf.h"
 #include "Arduino.h"
 

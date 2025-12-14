@@ -1,3 +1,6 @@
+// Example: AHRS quaternion printing at 250 Hz
+// NOTE: This sketch includes `mpu_ahrs_ekf.h`, which is not present in this repo.
+
 #include "mpu_ahrs_ekf.h"
 
 unsigned long Time;

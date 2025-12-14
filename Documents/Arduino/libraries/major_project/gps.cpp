@@ -1,3 +1,9 @@
+/*
+  u-blox GPS NAV-PVT (UBX) parser implementation
+  Streams UBX over `Serial1`, accumulates a NAV-PVT struct, and validates with Fletcher checksum.
+  Updates globals for time-of-week, NED velocity, LLA, and MSL altitude.
+  Note: `gps_setup()` sends UBX config at 9600 baud and waits for frames; ensure wiring and power.
+*/
 #include "gps.h"
 
 NAV_PVT pvt;

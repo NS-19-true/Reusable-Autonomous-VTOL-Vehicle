@@ -1,3 +1,12 @@
+/*
+  IMU Pose + Position EKF implementation
+  - `imu_setup()` configures the MPU9250 and calibrates biases.
+  - `pose_setup()` initializes AHRS_EKF (attitude) and POS_EKF (position) using initial averages
+    and reference LLA (from GPS/BMP). Also sets gravity in m/s^2.
+  - `pose_update()` reads sensors, runs AHRS update to get `q`, assembles input `u = [q, accel]`,
+    gates corrections by GPS time-of-week, computes BMP vertical velocity, and runs POS update.
+  Outputs: `q` (double[4]) and `x` (double[9]: accel, vel, pos in NED).
+*/
 #include "mpu_pose_ekf.h"
 
 // Sensor variables

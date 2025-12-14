@@ -1,3 +1,10 @@
+"""
+Python visualization of attitude using Panda3D.
+Expects serial lines with 8 comma-separated values:
+  columns[1..4] = quaternion (w, x, y, z)
+  columns[5..7] = N, E, D (optional, not used here)
+Set the COM port and baud as needed; defaults to `COM10` at 2000000.
+"""
 import numpy as np
 from ahrs.filters import EKF
 from ahrs.common.orientation import acc2q

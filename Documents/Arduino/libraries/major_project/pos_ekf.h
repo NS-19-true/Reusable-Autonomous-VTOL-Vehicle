@@ -1,3 +1,11 @@
+/*
+  POS_EKF: Position/Velocity/Acceleration EKF in NED frame
+  9-state model x = [aN, aE, aD, vN, vE, vD, pN, pE, pD].
+  Inputs u = [q0, q1, q2, q3, aX, aY, aZ] (quaternion and body accel),
+  Measurements z = [vN, vE, vD, lat(rad), lon(rad), alt(m)] converted to NED.
+  - `init(...)` sets input/measurement covariances (Q, R), gravity, reference LLA, timestep, P, x.
+  - `update(u, Q_q, iTOW, z)` predicts every cycle; corrects only when GPS iTOW advances.
+*/
 #include "eigen.h"
 #include <Eigen/Dense>
 

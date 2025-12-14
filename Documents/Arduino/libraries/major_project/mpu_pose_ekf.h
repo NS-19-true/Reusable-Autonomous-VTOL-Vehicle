@@ -1,3 +1,13 @@
+/*
+  IMU Pose + Position EKF glue
+  Orchestrates sensor setup and data fusion:
+  - Reads IMU (MPU9250), compensates biases, and runs AHRS_EKF to estimate quaternion `q`.
+  - Reads GPS (u-blox NAV-PVT) and BMP280, converts LLA to NED, and runs POS_EKF to estimate
+    acceleration, velocity, and position `x` in NED.
+  Exposed functions:
+  - `imu_setup()` / `pose_setup()` for initialization, `imu_read()` for IMU sampling,
+    `pose_update()` to run one fusion step, with outputs `q` and `x`.
+*/
 #include "ahrs_ekf.h"
 #include "pos_ekf.h"
 #include "MPU9250.h"

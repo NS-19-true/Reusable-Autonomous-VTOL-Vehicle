@@ -1,3 +1,12 @@
+/*
+  u-blox GPS NAV-PVT (UBX) parser
+  Configures a u-blox receiver via UBX to 10 Hz and parses NAV-PVT messages.
+  Provides globals: `iTOW`, `velN`, `velE`, `gps_velD`, `latitude`, `longitude`, `gps_altitude`.
+  Usage:
+  - Call `gps_setup()` to initialize Serial1 and send UBX config in `UBLOX_INIT`.
+  - Call `gps_read()` to update the globals when a full NAV-PVT frame is received.
+  - `processGPS()` returns true when a complete, checksum-verified NAV-PVT has been parsed.
+*/
 #include "Arduino.h"
 
 #define gps Serial1
