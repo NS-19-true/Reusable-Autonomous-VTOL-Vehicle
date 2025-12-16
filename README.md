@@ -29,13 +29,44 @@ https://github.com/user-attachments/assets/915736a8-9bbe-4e83-aeb2-1a3086ffe436
   - **readme.txt** – old notes (can be ignored).
 
 ## Data Flow
-1. IMU sampling (`MPU9250`): accel/gyro/mag at configured rates (e.g. Ts = 0.004 s).
-2. Bias compensation: averages over startup to subtract accel and gyro biases; magnetometer ellipse compensation.
-3. AHRS_EKF: produces normalized quaternion `q` from accel, mag, gyro.
-4. GPS/BMP: UBX NAV-PVT at 10 Hz; BMP altitude sampled when new GPS data arrives; BMP vertical velocity estimated from altitude delta.
-5. POS_EKF: inputs `[q0 q1 q2 q3 ax ay az]`, corrects when iTOW increments; converts LLA to NED relative to a startup reference.
-6. Telemetry: optional NRF24L01 sends up to 8 floats (e.g., quaternion and NED components).
-7. Visualization: Python scripts display attitude cube or 3D trajectory.
+
+### IMU Sampling (MPU9250)
+- The system samples an MPU9250 IMU at a fixed rate (example: 250 Hz, `Ts = 0.004 s`).
+- Accelerometer, gyroscope, and magnetometer data are acquired at each sample.
+
+### Bias & Sensor Compensation
+- At startup, bias calibration is performed by averaging initial samples.
+- Accelerometer and gyroscope offsets are estimated and subtracted.
+- Magnetometer measurements are corrected using ellipse (hard/soft iron) compensation.
+
+### AHRS EKF
+- An Attitude and Heading Reference System based on an Extended Kalman Filter (EKF) is used.
+- Accelerometer, gyroscope, and magnetometer data are fused to estimate orientation.
+- The filter outputs a normalized quaternion `q`.
+
+### GPS & Barometer (BMP)
+- GPS data is received using UBX NAV-PVT messages at 10 Hz.
+- GPS provides position and time information.
+- A BMP barometer provides altitude measurements.
+- Barometric altitude is sampled only when new GPS data arrives.
+- Vertical velocity is computed from successive barometric altitude differences.
+
+### Position EKF (POS_EKF)
+- Inputs include orientation `q` and body-frame accelerations `[ax, ay, az]`.
+- EKF corrections are applied when the GPS `iTOW` value changes.
+- GPS latitude, longitude, and altitude (LLA) are converted to local NED coordinates.
+- The NED frame is defined relative to a startup reference point.
+
+### Telemetry
+- Telemetry can be transmitted via an NRF24L01 radio link.
+- The link is limited to 8 floating-point values.
+- Typical telemetry includes quaternion and NED position/velocity.
+
+### Visualization
+- Python scripts are used for visualization.
+- Orientation is displayed using an attitude cube.
+- Motion is visualized as a 3D flight or trajectory plot.
+
 
 ## Hardware
 - Microcontroller: Teensy (tested) or Arduino compatible with `Serial1`, I2C, SPI.
